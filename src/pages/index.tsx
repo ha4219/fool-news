@@ -56,7 +56,13 @@ export default function Home() {
             <label htmlFor="image" className="block mb-2 text-sm font-medium ">
               Image
             </label>
-            <input type="file" id="image" multiple={false} name="image" />
+            <input
+              type="file"
+              id="image"
+              accept="image/*"
+              multiple={false}
+              name="image"
+            />
           </div>
           <div className="mb-6">
             <label
