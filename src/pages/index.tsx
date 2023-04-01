@@ -1,9 +1,12 @@
 import DragAndDropImage from '@/components/DragAndDropImage';
+import { Data } from '@/types';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useState } from 'react';
 
 export default function Home() {
-  const handleSubmit = (e: React.SyntheticEvent) => {
+  const [link, setLink] = useState<string | null>(null);
+  const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     const target = e.target as typeof e.target & {
       title: { value: string };
@@ -16,11 +19,12 @@ export default function Home() {
     data.append('content', target.content.value);
     data.append('image', target.image.files[0]);
 
-    fetch('/api/write', {
+    const raw = await fetch('/api/write', {
       method: 'POST',
       body: data,
     });
-
+    const json: Data = await raw.json();
+    json.id && setLink(json.id);
     return;
   };
 
@@ -33,7 +37,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="container mx-auto text-gray-900 dark:text-white py-10">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="mb-10">
           <div className="mb-6">
             <label htmlFor="title" className="block mb-2 text-sm font-medium ">
               Title
@@ -71,11 +75,21 @@ export default function Home() {
           </div>
           <button
             type="submit"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            className="block w-full text-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
           >
             Submit
           </button>
         </form>
+        {link && (
+          <div className="mb-6 w-full">
+            <a
+              href={link}
+              className="block w-full text-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            >
+              go link
+            </a>
+          </div>
+        )}
       </main>
     </>
   );
