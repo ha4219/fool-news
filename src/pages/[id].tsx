@@ -10,14 +10,14 @@ export default function FakeNewsPage({ data }: { data: Data }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main className="container mx-auto text-gray-900 dark:text-white py-10">
+        <div className="text-9xl">{data.content}</div>
         <Image
-          width={0}
-          height={0}
+          width={100}
+          height={100}
           src={data.image ? `/${data.image}` : '/default.png'}
-          className="hidden"
+          className="opacity-0"
           alt="main-image"
         />
-        <div className="text-9xl">{data.content}</div>
       </main>
     </>
   );
