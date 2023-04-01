@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import formidable from 'formidable';
 import fs from 'fs';
 import { Data } from '@/types';
+import AWS from 'aws-sdk';
 
 export const config = {
   api: {
@@ -10,12 +11,27 @@ export const config = {
   },
 };
 
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
+});
+
 const saveImageFile = async (file: any) => {
+  // const data = fs.readFileSync(file.filepath);
+  // const f = `./public/${file.originalFilename}`;
+  // fs.writeFileSync(f, data);
+  // fs.unlinkSync(file.filepath);
+  // return file.originalFilename;
+  const f = `${file.originalFilename}`;
   const data = fs.readFileSync(file.filepath);
-  const f = `./public/${file.originalFilename}`;
-  fs.writeFileSync(f, data);
-  fs.unlinkSync(file.filepath);
-  return file.originalFilename;
+  const uploadImage = await s3
+    .upload({
+      Bucket: process.env.AWS_S3_BUCKET_NAME as string,
+      Key: f,
+      Body: data,
+    })
+    .promise();
+  return uploadImage.Location;
 };
 
 export default async function handler(

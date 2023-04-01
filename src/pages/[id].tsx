@@ -14,7 +14,7 @@ export default function FakeNewsPage({ data }: { data: Data }) {
         <Image
           width={100}
           height={100}
-          src={data.image ? `/${data.image}` : '/default.png'}
+          src={data.image ? `${data.image}` : '/default.png'}
           className="opacity-0"
           alt="main-image"
         />
