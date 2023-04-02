@@ -11,7 +11,7 @@
 
 6. If you want to change the hostname, use [bitly](https://bitly.com/)
 
-## Response
+## Reaction
 <table>
   <tr>
     <td>
