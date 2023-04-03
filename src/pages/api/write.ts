@@ -38,9 +38,26 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>,
 ) {
-  if (!fs.existsSync('data')) {
-    fs.mkdirSync('data');
-  }
+  // if (!fs.existsSync('data')) {
+  //   fs.mkdirSync('data');
+  // }
+  // const id = Math.random().toString(36).substr(2, 16);
+  // const f = `data/${id}.json`;
+  // const form = new formidable.IncomingForm();
+  // const data = (await new Promise((resolve, reject) => {
+  //   form.parse(req, async function (err, fields, files) {
+  //     if (files) {
+  //       const imgPath = await saveImageFile(files.image);
+  //       resolve({ ...fields, image: imgPath } as Data);
+  //     }
+  //     resolve({ ...fields, image: null } as Data);
+  //   });
+  // })) as Data;
+  // data.id = id;
+  // fs.writeFileSync(f, JSON.stringify(data));
+
+  // return res.status(200).json(data);
+
   const id = Math.random().toString(36).substr(2, 16);
   const f = `data/${id}.json`;
   const form = new formidable.IncomingForm();
@@ -54,7 +71,15 @@ export default async function handler(
     });
   })) as Data;
   data.id = id;
-  fs.writeFileSync(f, JSON.stringify(data));
+  console.log(data);
+
+  await s3
+    .upload({
+      Bucket: process.env.AWS_S3_BUCKET_NAME as string,
+      Key: f,
+      Body: JSON.stringify(data),
+    })
+    .promise();
 
   return res.status(200).json(data);
 }
