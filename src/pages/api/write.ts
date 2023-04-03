@@ -22,7 +22,8 @@ const saveImageFile = async (file: any) => {
   // fs.writeFileSync(f, data);
   // fs.unlinkSync(file.filepath);
   // return file.originalFilename;
-  const f = `${file.originalFilename}`;
+
+  const f = `${file.newFilename}`;
   const data = fs.readFileSync(file.filepath);
   const uploadImage = await s3
     .upload({
@@ -71,7 +72,6 @@ export default async function handler(
     });
   })) as Data;
   data.id = id;
-  console.log(data);
 
   await s3
     .upload({
