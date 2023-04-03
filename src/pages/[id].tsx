@@ -11,9 +11,7 @@ export default function FakeNewsPage({ data }: { data: Data }) {
       </Head>
       <main className="container mx-auto text-gray-900 dark:text-white py-10">
         <div className="text-9xl">{data.content}</div>
-        <Image
-          width={100}
-          height={100}
+        <img
           src={data.image ? `${data.image}` : '/default.png'}
           className="opacity-0"
           alt="main-image"
