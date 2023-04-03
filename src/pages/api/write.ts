@@ -64,7 +64,7 @@ export default async function handler(
   const form = new formidable.IncomingForm();
   const data = (await new Promise((resolve, reject) => {
     form.parse(req, async function (err, fields, files) {
-      if (files) {
+      if (files.length) {
         const imgPath = await saveImageFile(files.image);
         resolve({ ...fields, image: imgPath } as Data);
       }
