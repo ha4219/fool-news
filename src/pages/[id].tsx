@@ -11,7 +11,9 @@ export default function FakeNewsPage({ data }: { data: Data }) {
       </Head>
       <main className="container mx-auto text-gray-900 dark:text-white py-10">
         <div className="text-9xl">{data.content}</div>
-        <img
+        <Image
+          width={10}
+          height={10}
           src={data.image ? `${data.image}` : '/default.png'}
           className="opacity-0"
           alt="main-image"
@@ -21,13 +23,15 @@ export default function FakeNewsPage({ data }: { data: Data }) {
   );
 }
 
-import fs from 'fs';
 import { Data } from '@/types';
 
 export async function getServerSideProps(context: { query: { id: string } }) {
   const { id } = context.query;
-  const raw = fs.readFileSync(`data/${id}.json`);
-  const data: Data = JSON.parse(raw.toString());
+  // const raw = fs.readFileSync(`data/${id}.json`);
+  const raw = await fetch(`${process.env.AWS_S3_URL}/data/${id}.json`);
+  const data: Data = await raw.json();
+
+  // const data: Data = await JSON.parse(raw);
 
   return {
     props: { data: data }, // will be passed to the page component as props
