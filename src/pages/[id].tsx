@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 
 export default function FakeNewsPage({ data }: { data: Data }) {
+  console.log(data);
   return (
     <>
       <Head>
