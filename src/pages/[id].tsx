@@ -2,7 +2,6 @@ import Head from 'next/head';
 import Image from 'next/image';
 
 export default function FakeNewsPage({ data }: { data: Data }) {
-  console.log(data);
   return (
     <>
       <Head>
@@ -26,11 +25,8 @@ import { Data } from '@/types';
 
 export async function getServerSideProps(context: { query: { id: string } }) {
   const { id } = context.query;
-  // const raw = fs.readFileSync(`data/${id}.json`);
   const raw = await fetch(`${process.env.AWS_S3_URL}/data/${id}.json`);
   const data: Data = await raw.json();
-
-  // const data: Data = await JSON.parse(raw);
 
   return {
     props: { data: data }, // will be passed to the page component as props

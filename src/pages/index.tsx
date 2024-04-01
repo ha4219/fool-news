@@ -21,7 +21,7 @@ export default function Home() {
     data.append('content', target.content.value);
     data.append('image', target.image.files[0]);
 
-    const raw = await fetch('/api/write', {
+    const raw = await fetch('/api/post', {
       method: 'POST',
       body: data,
     });
